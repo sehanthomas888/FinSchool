@@ -32,9 +32,13 @@ main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 72px; min-height: 7
 
 /* header */
 .top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
-.top-in { max-width: 1080px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 24px; }
+.top-in { max-width: 1080px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 12px; }
 .brand { font: 700 22px var(--serif); color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-.by { font: 500 12px var(--sans); color: var(--muted); letter-spacing: .02em; margin-left: 2px; }
+/* school breadcrumb: "R357 Education / <course>" */
+.school { display: flex; align-items: baseline; gap: 6px; text-decoration: none; color: var(--muted); font: 600 14px var(--sans); }
+.school:hover { color: var(--accent); }
+.school-mark { font-weight: 800; letter-spacing: .04em; color: var(--ink); }
+.sep { color: var(--line); font: 300 26px/1 var(--sans); user-select: none; }
 .mark { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font: 700 18px var(--serif); }
 .nav { display: flex; gap: 4px; margin-left: auto; }
 .nav a { color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 15px; font-weight: 500; }
@@ -61,10 +65,10 @@ main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 72px; min-height: 7
 .bar i { display: block; height: 100%; background: var(--accent); border-radius: 99px; transition: width .4s; }
 
 /* tracks + cards */
-.track { margin: 20px 0 44px; }
-.track-head { margin-bottom: 16px; }
-.track-head h2 { margin: 0 0 4px; font-size: 26px; }
-.track-head p { margin: 0; color: var(--muted); }
+.module { margin: 20px 0 44px; }
+.module-head { margin-bottom: 16px; }
+.module-head h2 { margin: 0 0 4px; font-size: 26px; }
+.module-head p { margin: 0; color: var(--muted); }
 .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 16px; }
 .card { display: flex; flex-direction: column; gap: 8px; background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); transition: transform .12s, border-color .12s; }
 .card:hover { transform: translateY(-2px); border-color: var(--accent); }
@@ -203,6 +207,8 @@ details.math summary { cursor: pointer; font-weight: 700; color: var(--accent); 
 
 .foot { border-top: 1px solid var(--line); padding: 22px 20px; text-align: center; color: var(--muted); font-size: 13.5px; }
 .foot p { max-width: 640px; margin: 0 auto 4px; }
+.foot a { color: var(--muted); }
+.foot a:hover { color: var(--accent); }
 
 .icon-btn { flex: none; }
 @media (max-width: 600px) {
@@ -215,6 +221,7 @@ details.math summary { cursor: pointer; font-weight: 700; color: var(--accent); 
   .pn { grid-template-columns: 1fr; }
   .pn a.r { grid-column: 1; }
 }
-@media (max-width: 440px) { .bt { display: none; } .nav a { padding: 6px 6px; font-size: 14px; } .nav { gap: 0; } .fx > .formula { font-size: 18px; padding: 12px 14px; } .fx-body { padding: 12px 14px 14px; } }
+@media (max-width: 520px) { .school-name { display: none; } }
+@media (max-width: 440px) { .bt, .sep { display: none; } .top-in { gap: 6px; padding: 8px 10px; } .school-mark { font-size: 13px; } .mark { width: 28px; height: 28px; font-size: 16px; } .nav a { padding: 6px 5px; font-size: 13.5px; } .nav { gap: 0; } .icon-btn { width: 32px; height: 32px; } .fx > .formula { font-size: 18px; padding: 12px 14px; } .fx-body { padding: 12px 14px 14px; } }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card, .bar i { transition: none; } }
 

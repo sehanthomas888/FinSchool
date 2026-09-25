@@ -2,30 +2,66 @@
 
 Repository: https://github.com/sehanthomas888/R357-Education
 
-R357 Education is the umbrella for a set of schools. Each school teaches one subject from its sources: plain-English lessons, interactive tools and breakdowns of the research behind the ideas.
+**R357 Education is a school of self-paced courses.** Each course teaches one subject from its sources: plain-English lessons, interactive tools, and breakdowns of the research behind the ideas.
 
-| Folder | What it is | Vercel project | Address |
-| --- | --- | --- | --- |
-| `portal/` | Landing page listing all schools | `r357-education` | https://r357-education.vercel.app |
-| `marginal/` | **Marginal by R357**: finance and economics | `marginal-r357` | https://marginal-r357.vercel.app |
+| Level | Name | Example |
+| --- | --- | --- |
+| The school | **R357 Education** | the home page |
+| A subject | **Course** | Marginal (finance and economics) |
+| A unit of a course | **Module** | Fixed income |
+| A page in a module | **Lesson** or **Paper breakdown** | Duration and convexity |
 
-All sites are static (plain HTML, CSS and JavaScript, no build step). Each folder is deployed as its own Vercel project by setting that project's **Root Directory** to the folder. Every push to `main` redeploys whichever projects are affected.
+Live at https://r357-education.vercel.app, with each course at its own path (Marginal: `/marginal`).
 
-## Run a school locally
+## Layout
 
-```bash
-node marginal/serve.js   # then open http://localhost:8123
+```
+index.html               the school home page (course catalog)
+shared/                  the engine every course uses
+  engine.js                router, lessons, quizzes, progress
+  ui.js                    charts, sliders, "show the math" panels
+  theme.css / theme.js     look and light/dark theme
+  school.js                the school's name (one place)
+  school-home.js, school.css   the home page
+courses/
+  catalog.js             the list of live courses shown on the home page
+  marginal/              a course: config, content, widgets
+  _template/             copy this to start a new course
+tools/                   dev server and checks (not deployed)
+vercel.json              public addresses, e.g. /marginal
 ```
 
-You can also open `marginal/index.html` directly in a browser.
+Everything is static: plain HTML, CSS and JavaScript, with no build step. One Vercel project serves the whole repo, and every push to `main` redeploys it.
 
-## Adding a new school (for example physics)
+## Run it locally
 
-1. Create a new folder next to `marginal/` (for example `physics/`) with its own `index.html`.
-2. In Vercel, create a new project from this repo and set its Root Directory to that folder.
-3. Add a card for it in `portal/index.html`.
-4. When a second school exists, move the shared engine (styles, charts, quiz and progress code) into a `shared/` folder so schools reuse it instead of copying it.
+```bash
+node tools/serve.js
+```
 
-## Marginal's content layout
+Then open http://localhost:8123 (school home) or http://localhost:8123/marginal (the course). The server applies the same rewrites as `vercel.json`.
 
-`marginal/content-*.js` hold the lessons, paper breakdowns, glossary and formula sheet; `marginal/widgets.js` holds the interactive tools; `marginal/app.js` is the router and UI. The order of lessons is set by the `TRACKS` list at the top of `marginal/app.js`.
+## Check your work before pushing
+
+```bash
+node tools/run-checks.js
+```
+
+This checks JavaScript syntax, audits every course's content (quiz keys, tag balance, links, that every lesson is in exactly one module and every widget exists), and independently recomputes the worked examples. For the interactive tools, also open a course, paste `tools/stress-test.js` into the browser console and check it prints `STRESS TEST PASSED`.
+
+## Adding a course (for example physics)
+
+1. Copy `courses/_template` to `courses/physics` and replace `_template` with `physics` in its `index.html` script paths.
+2. Edit `courses/physics/course.js`: name, subject, home-page copy, modules and (optionally) an accent color.
+3. Write lessons in `content-*.js` files and interactive tools in `widgets.js`. The template shows every building block, including the formula card format.
+4. Add the course to `courses/catalog.js`, and add two rewrites for it in `vercel.json` (copy the `/marginal` pair).
+5. Run `node tools/run-checks.js`, then push. There is nothing to configure in Vercel.
+
+## How a course is put together
+
+- `course.js` is the course's identity: name, home-page copy and the order of its modules.
+- `content-*.js` hold lessons (`window.LESSONS`), plus an optional glossary and formula sheet.
+- `widgets.js` holds the interactive tools, built from the shared UI kit.
+- The engine renders everything else, so courses look and behave alike and share one saved theme.
+
+Visitors' progress is saved in their own browser (`localStorage`), per course; the school home page shows it on each course card.

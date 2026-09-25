@@ -1,5 +1,7 @@
 # R357 Education
 
+Repository: https://github.com/sehanthomas888/R357-Education
+
 R357 Education is the umbrella for a set of schools. Each school teaches one subject from its sources: plain-English lessons, interactive tools and breakdowns of the research behind the ideas.
 
 | Folder | What it is | Vercel project | Address |

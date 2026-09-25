@@ -56,7 +56,7 @@
     const pctDone = Math.round(n / total * 100);
     app.innerHTML = `
     <section class="hero">
-      <p class="eyebrow">Economics &amp; finance, from the sources</p>
+      <p class="eyebrow">Marginal Education · Economics &amp; finance, from the sources</p>
       <h1>Learn the ideas.<br>Then read the papers behind them.</h1>
       <p class="lead">Concept lessons with interactive charts, plain-English breakdowns of landmark finance research, and quizzes to check that it stuck. Aimed at an intermediate reader who wants to understand how markets are actually modeled.</p>
       <div class="hero-cta">
@@ -205,7 +205,7 @@
     else if (view === 'formulas') formulasView();
     else homeView();
     window.scrollTo({ top: 0, behavior: 'instant' });
-    document.title = (view === 'lesson' && byId[parts[1]] ? byId[parts[1]].title.replace(/<[^>]+>/g, '') + ' · ' : '') + 'Marginal';
+    document.title = (view === 'lesson' && byId[parts[1]] ? byId[parts[1]].title.replace(/<[^>]+>/g, '') + ' · ' : '') + 'Marginal Education';
   }
   window.addEventListener('hashchange', route);
   document.getElementById('theme').addEventListener('click', toggleTheme);

@@ -201,7 +201,7 @@ details.math summary { cursor: pointer; font-weight: 700; color: var(--accent); 
 .pn span { font: 700 16px var(--serif); }
 
 .foot { border-top: 1px solid var(--line); padding: 22px 20px; text-align: center; color: var(--muted); font-size: 13.5px; }
-.foot p { max-width: 640px; margin: 0 auto; }
+.foot p { max-width: 640px; margin: 0 auto 4px; }
 
 .icon-btn { flex: none; }
 @media (max-width: 600px) {

@@ -10,4 +10,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': types[path.extname(p)] || 'application/octet-stream' });
     res.end(data);
   });
-}).listen(8123, () => console.log('Marginal Education running at http://localhost:8123'));
+}).listen(8123, () => console.log('Marginal by R357 running at http://localhost:8123'));

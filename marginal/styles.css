@@ -34,6 +34,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 72px; min-height: 7
 .top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .top-in { max-width: 1080px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 24px; }
 .brand { font: 700 22px var(--serif); color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 10px; }
+.by { font: 500 12px var(--sans); color: var(--muted); letter-spacing: .02em; margin-left: 2px; }
 .mark { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent); color: var(--accent-ink); font: 700 18px var(--serif); }
 .nav { display: flex; gap: 4px; margin-left: auto; }
 .nav a { color: var(--muted); text-decoration: none; padding: 6px 12px; border-radius: 8px; font-size: 15px; font-weight: 500; }

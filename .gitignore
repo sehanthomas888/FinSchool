@@ -1,0 +1,9 @@
+# Local tooling, not part of the site
+.claude/
+node_modules/
+.vercel/
+.env
+.env.*
+*.log
+.DS_Store
+Thumbs.db

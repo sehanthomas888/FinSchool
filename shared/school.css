@@ -1,0 +1,16 @@
+/* Styles that only the R357 Education home page needs. Everything else comes from theme.css. */
+.courses { margin: 8px 0 52px; }
+.section-label { font: 700 13px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
+/* cards stay a comfortable width even with a single course, so the page never looks empty or stretched */
+.course-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 460px)); gap: 18px; justify-content: start; }
+.course { display: flex; flex-direction: column; gap: 10px; background: var(--surface); border: 1px solid var(--line); border-radius: 16px; padding: 24px; text-decoration: none; color: var(--ink); box-shadow: var(--shadow); transition: transform .12s, border-color .12s; }
+.course:hover { transform: translateY(-2px); border-color: var(--accent); }
+.course-top { display: flex; align-items: center; gap: 12px; }
+.course h3 { font: 700 30px/1.15 var(--serif); margin: 4px 0 0; letter-spacing: -.01em; }
+.course p { margin: 0; color: var(--muted); font-size: 16px; line-height: 1.55; flex: 1; }
+.course .progress { margin-top: 4px; }
+.course .bar { flex: 1 1 auto; }
+.course .progress span { white-space: nowrap; }
+.course .go { font-weight: 700; color: var(--accent); }
+.more { color: var(--muted); font-size: 15px; margin: 18px 0 0; }
+@media (prefers-reduced-motion: reduce) { .course { transition: none; } }

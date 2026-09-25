@@ -1,0 +1,14 @@
+{
+  "rewrites": [
+    { "source": "/marginal", "destination": "/courses/marginal/index.html" },
+    { "source": "/marginal/", "destination": "/courses/marginal/index.html" }
+  ],
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "marginal-r357.vercel.app" }],
+      "destination": "https://r357-education.vercel.app/marginal",
+      "permanent": true
+    }
+  ]
+}

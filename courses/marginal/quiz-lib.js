@@ -22,6 +22,16 @@
   QL.annuityPV = (c, r, n) => c * (1 - Math.pow(1 + r, -n)) / r;
   QL.annuityFV = (c, r, n) => c * (Math.pow(1 + r, n) - 1) / r;
   QL.bondPrice = (face, cpnRate, y, n, freq) => { freq = freq || 1; const c = face * cpnRate / freq, i = y / freq, N = n * freq; return c * (1 - Math.pow(1 + i, -N)) / i + face / Math.pow(1 + i, N); };
+  // Macaulay duration in years: the payment-weighted average time to receive the cash flows (freq payments a year).
+  QL.macaulay = (face, cpnRate, y, n, freq) => {
+    freq = freq || 1; const c = face * cpnRate / freq, i = y / freq, T = Math.round(n * freq); let P = 0, D = 0;
+    for (let t = 1; t <= T; t++) { const pv = (c + (t === T ? face : 0)) / Math.pow(1 + i, t); P += pv; D += (t / freq) * pv; }
+    return D / P;
+  };
+  // Yield to maturity (a nominal yearly rate compounded `freq` times) found by repeated halving.
+  QL.ytm = (price, face, cpnRate, n, freq) => {
+    let lo = -0.5, hi = 2; for (let k = 0; k < 200; k++) { const mid = (lo + hi) / 2; if (QL.bondPrice(face, cpnRate, mid, n, freq) > price) lo = mid; else hi = mid; } return (lo + hi) / 2;
+  };
   QL.geoMean = rs => Math.pow(rs.reduce((p, r) => p * (1 + r), 1), 1 / rs.length) - 1;
   QL.mean = xs => xs.reduce((a, b) => a + b, 0) / xs.length;
   QL.sd = (xs, sample) => { const m = QL.mean(xs); return Math.sqrt(xs.reduce((a, x) => a + (x - m) * (x - m), 0) / (xs.length - (sample ? 1 : 0))); };

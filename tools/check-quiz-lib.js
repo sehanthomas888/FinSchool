@@ -28,6 +28,16 @@ for (const [face, cpn, y, n2, f] of [[1000, 0.05, 0.05, 3, 1], [1000, 0.06, 0.04
 }
 ok('a bond priced at its own coupon rate is worth its face value', near(QL.bondPrice(1000, 0.05, 0.05, 3, 1), 1000, 1e-9));
 ok('known value: 3-year 5% annual bond at 6% yield is 973.27', near(QL.bondPrice(1000, 0.05, 0.06, 3, 1), 973.2699, 1e-3));
+// duration: against the lesson's figures, and against a numerical derivative of the price (a different route entirely)
+ok('Macaulay duration of a 5% 10-year bond at 5% (semiannual) is 7.99', near(QL.macaulay(100, 0.05, 0.05, 10, 2), 7.99, 0.005), String(QL.macaulay(100, 0.05, 0.05, 10, 2)));
+ok('Macaulay duration of a zero equals its maturity', near(QL.macaulay(100, 0, 0.05, 10, 2), 10, 1e-9));
+ok('a higher coupon shortens duration (8% → 7.39)', near(QL.macaulay(100, 0.08, 0.05, 10, 2), 7.39, 0.005));
+for (const [c, y, n, f] of [[0.05, 0.05, 10, 2], [0.03, 0.06, 7, 1], [0.07, 0.04, 20, 2]]) {
+  const h = 1e-6, P = QL.bondPrice(100, c, y, n, f), mod = -(QL.bondPrice(100, c, y + h, n, f) - QL.bondPrice(100, c, y - h, n, f)) / (2 * h) / P;
+  ok(`modified duration = Macaulay ÷ (1 + y/m), checked by numerical derivative (${c}, ${y}, ${n}y)`, near(QL.macaulay(100, c, y, n, f) / (1 + y / f), mod, 1e-6), QL.macaulay(100, c, y, n, f) / (1 + y / f) + ' vs ' + mod);
+}
+ok('yield to maturity: 6% 10-year bond at 105 yields about 5.35%', near(QL.ytm(105, 100, 0.06, 10, 2) * 100, 5.35, 0.01), String(QL.ytm(105, 100, 0.06, 10, 2) * 100));
+ok('yield to maturity reprices the bond exactly', near(QL.bondPrice(100, 0.06, QL.ytm(97.5, 100, 0.06, 8, 2), 8, 2), 97.5, 1e-6));
 // means, geometric mean, standard deviation
 ok('mean', near(QL.mean([4, 12, -2, 10]), 6));
 ok('population sd of 4, 12, -2, 10 is sqrt(30)', near(QL.sd([4, 12, -2, 10]), Math.sqrt(30)));

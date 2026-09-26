@@ -10,7 +10,7 @@ window.R357.config = {
   // Which sign-in methods to offer. With both off, the site works exactly as before (progress saved on this device only).
   //   google:    turn on after Google sign-in is enabled in Supabase (see supabase/README.md)
   //   emailCode: turn on after a custom email sender and the code template are set up (see supabase/README.md)
-  auth: { google: false, emailCode: false }
+  auth: { google: true, emailCode: false }
 };
 
 // Developer convenience, localhost only: http://localhost:8123/marginal?auth=google,emailCode shows the sign-in UI for testing.

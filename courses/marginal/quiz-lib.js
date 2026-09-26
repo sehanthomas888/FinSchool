@@ -28,6 +28,19 @@
   QL.erf = x => { const s = x < 0 ? -1 : 1; x = Math.abs(x); const t = 1 / (1 + 0.3275911 * x); const y = 1 - (((((1.061405429 * t - 1.453152027) * t) + 1.421413741) * t - 0.284496736) * t + 0.254829592) * t * Math.exp(-x * x); return s * y; };
   QL.N = z => 0.5 * (1 + QL.erf(z / Math.SQRT2));
 
+  // Black–Scholes for a non-dividend-paying stock. Returns d1, d2 and the call and put prices.
+  QL.bs = (S, K, r, sigma, T) => {
+    const w = sigma * Math.sqrt(T), d1 = (Math.log(S / K) + (r + sigma * sigma / 2) * T) / w, d2 = d1 - w, df = Math.exp(-r * T);
+    return { d1, d2, call: S * QL.N(d1) - K * df * QL.N(d2), put: K * df * QL.N(-d2) - S * QL.N(-d1) };
+  };
+  // A completely different way of pricing the same European call (Cox–Ross–Rubinstein binomial tree); converges to Black–Scholes.
+  QL.binomCall = (S, K, r, sigma, T, steps) => {
+    const n = steps || 600, dt = T / n, u = Math.exp(sigma * Math.sqrt(dt)), d = 1 / u, p = (Math.exp(r * dt) - d) / (u - d), disc = Math.exp(-r * dt);
+    const v = []; for (let i = 0; i <= n; i++) v.push(Math.max(S * Math.pow(u, n - i) * Math.pow(d, i) - K, 0));
+    for (let step = n - 1; step >= 0; step--) for (let i = 0; i <= step; i++) v[i] = disc * (p * v[i] + (1 - p) * v[i + 1]);
+    return v[0];
+  };
+
   // Build a numeric multiple-choice question.
   //   q      question text            ans    the right answer (a number)
   //   wrong  wrong answers (numbers), each a real mistake a beginner makes; up to 3 are used

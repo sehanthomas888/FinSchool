@@ -37,6 +37,16 @@ ok('geometric mean of constant returns is that return', near(QL.geoMean([0.1, 0.
 // normal distribution against textbook values
 for (const [z, want] of [[0, 0.5], [1, 0.8413], [-1, 0.1587], [1.96, 0.975], [2, 0.9772], [-0.47, 0.3192]]) ok(`N(${z}) is about ${want}`, near(QL.N(z), want, 5e-4), String(QL.N(z)));
 ok('N(-z) = 1 - N(z)', near(QL.N(-0.83), 1 - QL.N(0.83), 1e-9));
+// Black–Scholes against the lesson's worked example, put–call parity, and an independent binomial tree
+const b0 = QL.bs(100, 100, 0.03, 0.25, 0.5);
+ok('Black–Scholes call for S=K=100, r=3%, σ=25%, T=0.5 is about 7.76', near(b0.call, 7.76, 0.01), String(b0.call));
+ok('Black–Scholes put for the same inputs is about 6.27', near(b0.put, 6.27, 0.01), String(b0.put));
+ok('d1 and d2 match the lesson (0.173 and -0.004)', near(b0.d1, 0.1732, 1e-3) && near(b0.d2, -0.0036, 1e-3));
+for (const [S, K, r, s, T] of [[100, 100, 0.03, 0.25, 0.5], [50, 45, 0.05, 0.3, 1], [80, 100, 0.02, 0.4, 2], [120, 100, 0.04, 0.2, 0.25]]) {
+  const b = QL.bs(S, K, r, s, T);
+  ok(`put–call parity C − P = S − K·e^(−rT) (${S}, ${K}, ${T}y)`, near(b.call - b.put, S - K * Math.exp(-r * T), 1e-6));
+  ok(`binomial tree agrees with Black–Scholes (${S}, ${K}, ${T}y)`, near(QL.binomCall(S, K, r, s, T, 800), b.call, 0.03), QL.binomCall(S, K, r, s, T, 800) + ' vs ' + b.call);
+}
 // formatting
 ok('usd formats thousands and negatives', QL.usd(1225.04) === '$1,225.04' && QL.usd(-50, 0) === '−$50' && QL.usd(10000, 0) === '$10,000');
 ok('pct formats with the sign', QL.pct(12.5, 1) === '12.5%' && QL.pct(-2.5, 2) === '−2.50%');

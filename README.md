@@ -47,7 +47,15 @@ Then open http://localhost:8123 (school home) or http://localhost:8123/marginal 
 node tools/run-checks.js
 ```
 
-This checks JavaScript syntax, audits every course's content (quiz keys, tag balance, links, that every lesson is in exactly one module and every widget exists), and independently recomputes the worked examples. For the interactive tools, also open a course, paste `tools/stress-test.js` into the browser console and check it prints `STRESS TEST PASSED`.
+This checks JavaScript syntax; audits every course's content (question banks of at least 8, tag balance, links, that every lesson is in exactly one module, every widget exists, and that **no lesson id ever published has disappeared**); runs every generated quiz question 40 times with an independent second calculation; and independently recomputes the worked examples printed in the lessons. For the interactive tools, also open a course, paste `tools/stress-test.js` into the browser console and check it prints `STRESS TEST PASSED`.
+
+## Writing lessons and quizzes
+
+Lessons are written for someone meeting the subject for the first time: outcomes first, new words explained before use, a story and real numbers before the formula, worked examples, pause-and-try questions and common mistakes. Read **`courses/STYLE.md`** before writing one.
+
+Each lesson has a **question bank** (at least 8 questions, tagged concept / calc / apply). Every attempt draws 5, mixes the kinds, and avoids the previous attempt's questions, so retaking a quiz gives a fresh set. Calculation questions are usually *generated* (new numbers each time) with helpers in `courses/marginal/quiz-lib.js`.
+
+**Learner progress is protected.** It is saved by lesson id, so ids are never removed or renamed (`courses/<course>/lesson-ids.json` plus the audit enforce it), and a saved best quiz score is only replaced by a better percentage, never by a longer or different quiz.
 
 ## Adding a course (for example physics)
 

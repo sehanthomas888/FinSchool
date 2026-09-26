@@ -9,14 +9,14 @@ window.COURSE = {
   disclaimer: 'A study aid, not financial advice. Summaries are simplified: read the original papers before relying on any detail.',
   primer: { id: 'math-basics', label: 'the math primer' },   // shown on the formula sheet for readers stuck on notation
   hero: {
-    eyebrow: 'Economics &amp; finance, from the sources',
-    title: 'Learn the ideas.<br>Then read the papers behind them.',
-    lead: 'Concept lessons with interactive charts, plain-English breakdowns of landmark finance research, and quizzes to check that it stuck. Aimed at an intermediate reader who wants to understand how markets are actually modeled.'
+    eyebrow: 'Economics &amp; finance, from zero',
+    title: 'Learn finance from the ground up.<br>Then read the papers behind it.',
+    lead: 'No background needed. Every lesson opens with what you will be able to do, explains the new words first, builds each idea from a small story and real numbers, and ends with a quiz that draws fresh questions every time. By the end you can follow the landmark research the field is built on.'
   },
   how: [
-    { title: '1. Learn the concept', text: 'Short lessons with the key equation and the intuition behind it.' },
-    { title: '2. Play with it', text: 'Move the sliders and watch the model respond, so the formula becomes a shape you recognize.' },
-    { title: '3. Read the source', text: 'Paper pages tell you what to look for, and what critics said afterwards, before you open the original.' }
+    { title: '1. Understand it', text: 'Plain-English lessons that start from a story and a small example, then build up to the formula. Every symbol is explained.' },
+    { title: '2. Try it', text: 'Pause-and-try questions, interactive charts you can move, and a quiz that gives you fresh questions and new numbers each time you retake it.' },
+    { title: '3. Read the source', text: 'Each paper page opens with the paper in plain words, then walks through the method and what critics said, before you open the original.' }
   ],
   // Modules, in learning order. Every lesson id must appear in exactly one module (tools/audit.js checks this).
   modules: [

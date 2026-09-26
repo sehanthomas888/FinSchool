@@ -9,6 +9,6 @@ window.Rosetta.courses = [
     subject: 'Finance & economics',
     path: '/marginal',
     mark: 'M',
-    blurb: 'Portfolio theory, asset pricing, financial statement analysis, corporate finance, options and fixed income, with worked examples, calculators and 20+ landmark papers explained.'
+    blurb: 'Finance from zero: what money, risk and returns are, then portfolio theory, financial statements, options and bonds, with worked examples, fresh-every-time quizzes and 20+ landmark papers explained in plain words.'
   }
 ];

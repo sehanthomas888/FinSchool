@@ -28,6 +28,7 @@ console.log(`${syntaxBad ? 'FAIL' : 'PASS'}  syntax (${js.length} JavaScript fil
 run('content audit (all courses)', ['tools/audit.js']);
 run('progress merge rules (accounts)', ['tools/check-progress-sync.js']);
 run('quiz question helpers (cross-checked)', ['tools/check-quiz-lib.js']);
+run('math: worked examples written in the lessons', ['tools/check-math-lessons.js']);
 run('math: core examples and formulas', ['tools/check-math-core.js']);
 run('math: fixed income examples and formulas', ['tools/check-math-fixedincome.js']);
 

@@ -223,7 +223,7 @@ details.math summary { cursor: pointer; font-weight: 700; color: var(--accent); 
 }
 /* accounts: header button, avatar menu, sign-in dialog */
 .acct { position: relative; display: flex; align-items: center; }
-.signin-btn { display: inline-flex; align-items: center; gap: 7px; font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 7px 13px; cursor: pointer; height: 36px; }
+.signin-btn { display: inline-flex; align-items: center; gap: 7px; font: 600 14px var(--sans); color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: 10px; padding: 7px 13px; cursor: pointer; height: 36px; white-space: nowrap; flex-shrink: 0; }
 .signin-btn:hover { border-color: var(--accent); color: var(--accent); }
 .avatar { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); background: var(--accent-soft); color: var(--accent); font: 700 15px var(--sans); cursor: pointer; }
 .avatar.err { border-color: var(--bad); }

@@ -165,7 +165,7 @@
     const gl = document.getElementById('gl');
     const draw = q => {
       q = (q || '').toLowerCase();
-      gl.innerHTML = window.GLOSSARY.filter(g => !q || (g[0] + ' ' + g[1]).toLowerCase().includes(q))
+      gl.innerHTML = window.GLOSSARY.slice().sort((a, b) => a[0].localeCompare(b[0], undefined, { sensitivity: 'base' })).filter(g => !q || (g[0] + ' ' + g[1]).toLowerCase().includes(q))
         .map(g => `<div><dt>${g[0]}</dt><dd>${g[1]} <a href="#/lesson/${g[2]}">${esc(clip(byId[g[2]].title, 36))} →</a></dd></div>`).join('') || '<p class="empty">No terms match.</p>';
     };
     draw();

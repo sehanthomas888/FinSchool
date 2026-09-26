@@ -1,11 +1,11 @@
-// Structural audit of every course. Run: node tools/audit.js
+﻿// Structural audit of every course. Run: node tools/audit.js
 // For each folder in courses/ (except ones starting with "_", which are templates and are also checked with --all)
 // it loads the course exactly as its index.html does, then checks the content for mistakes a reader would hit.
 //   --record-ids   add any new lesson ids to courses/<course>/lesson-ids.json (ids are only ever added, never removed)
 const fs = require('fs'), path = require('path'), vm = require('vm');
 const ROOT = path.resolve(__dirname, '..'), COURSES = path.join(ROOT, 'courses');
 const includeTemplates = process.argv.includes('--all');
-const MIN_POOL = 3;          // smallest allowed question bank per lesson (raised as lessons are rewritten with bigger banks)
+const MIN_POOL = 8;          // smallest allowed question bank per lesson (each attempt draws 5, so a bank of 8+ gives a fresh mix)
 const GEN_RUNS = 40;         // each generated question is run this many times and every result is validated
 let problems = 0;
 const bad = msg => { problems++; console.log('  FAIL ' + msg); };
@@ -114,3 +114,4 @@ try {
 
 console.log(problems ? `\n${problems} problem(s) found` : '\nAudit passed: no problems');
 process.exit(problems ? 1 : 0);
+

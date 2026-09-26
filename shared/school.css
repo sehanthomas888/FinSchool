@@ -13,4 +13,8 @@
 .course .progress span { white-space: nowrap; }
 .course .go { font-weight: 700; color: var(--accent); }
 .more { color: var(--muted); font-size: 15px; margin: 18px 0 0; }
+.more p { margin: 0; }
+/* home page header has no nav, so push the account and theme controls to the right */
+.home-top .acct, .home-top > .icon-btn { margin-left: auto; }
+.home-top .acct + .icon-btn { margin-left: 0; }
 @media (prefers-reduced-motion: reduce) { .course { transition: none; } }

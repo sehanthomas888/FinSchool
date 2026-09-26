@@ -19,7 +19,7 @@ function balanced(id, field, html) {
 // which scripts does the page load? (skip DOM-only ones)
 function loadCourse(dir) {
   const html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8').replace(/<!--[\s\S]*?-->/g, '');   // ignore commented-out scripts
-  const srcs = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]).filter(s => !/theme\.js$|engine\.js$/.test(s));
+  const srcs = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]).filter(s => !/shared\/(theme|engine|config|auth|account)\.js$/.test(s));   // browser-only scripts
   const win = { R357: {} }; const ctx = vm.createContext({ window: win, console, Math, JSON, Object, Array, String, Number, Date });
   for (const s of srcs) {
     const file = path.join(ROOT, s.replace(/^\//, ''));

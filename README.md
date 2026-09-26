@@ -64,4 +64,11 @@ This checks JavaScript syntax, audits every course's content (quiz keys, tag bal
 - `widgets.js` holds the interactive tools, built from the shared UI kit.
 - The engine renders everything else, so courses look and behave alike and share one saved theme.
 
-Visitors' progress is saved in their own browser (`localStorage`), per course; the school home page shows it on each course card.
+## Learner accounts
+
+Progress is always saved in the visitor's own browser (`localStorage`), per course, and the school home page shows it on each course card. Learners can also **sign in** so their progress follows them between devices; this uses Supabase (see `supabase/README.md` for the full setup, including the two steps that need your own accounts: Google sign-in and a custom email sender).
+
+- Sign-in methods are switched on in `shared/config.js` (`auth: { google, emailCode }`); both are off until set up, and with both off the site behaves exactly as before.
+- Progress from several devices (and from before signing in) is merged, never overwritten, by the rules in `shared/progress-sync.js`.
+- Learners can delete their account and all their data themselves from the account menu. The privacy page is `privacy.html`.
+- Extra checks: `node tools/check-progress-sync.js` (part of `run-checks`) tests the merge rules, and `tools/test-supabase-rls.js` tests the database security rules against the live project.

@@ -14,15 +14,65 @@
   const TYPE_LABEL = Object.assign({ concept: 'Concept', paper: 'Paper', guide: 'Guide' }, COURSE.typeLabels || {});
   const HAS_FORMULAS = !!(window.FORMULAS && window.FORMULAS.length), HAS_GLOSSARY = !!(window.GLOSSARY && window.GLOSSARY.length);
 
-  /* ---------- progress (localStorage with in-memory fallback) ---------- */
+  /* ---------- progress ----------
+     Always saved in this browser (localStorage). When the learner is signed in it is also synced to their account:
+     each sync pulls the account's copy, merges it with this device's copy (rules in shared/progress-sync.js) and pushes
+     the result back, so several devices, and guest progress from before signing in, all combine without losing anything. */
+  const sync = window.R357.sync, auth = window.R357.auth, account = window.R357.account;
   const KEY = COURSE.id + '.v1', SUMMARY_KEY = 'r357.summary.' + COURSE.id;
-  let state = { done: {}, scores: {} };
-  try { const s = JSON.parse(localStorage.getItem(KEY)); if (s && s.done) state = s; } catch (e) { /* storage unavailable */ }
+  let state = sync.empty();
+  try { state = sync.normalize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { /* storage unavailable or empty */ }
   const doneCount = () => LESSONS.filter(l => state.done[l.id]).length;
   // A tiny summary the school home page reads to show progress without loading the whole course.
   const writeSummary = () => { try { localStorage.setItem(SUMMARY_KEY, JSON.stringify({ total: LESSONS.length, done: doneCount(), updated: Date.now() })); } catch (e) { /* ignore */ } };
-  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } writeSummary(); };
+  const persist = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) { /* ignore */ } writeSummary(); };
   writeSummary();
+
+  let syncTimer = null, retryTimer = null, syncing = false, dirty = false;
+  function save() {
+    persist();
+    if (auth.user()) { dirty = true; clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 1200); account.setStatus('saving'); }
+  }
+  // Redraw after progress arrives from another device, unless the reader is part-way through a quiz.
+  function refreshView() { if (!document.querySelector('.q[data-done]')) route(); }
+
+  async function syncNow() {
+    const u = auth.user();
+    if (!u) return;
+    if (syncing) { dirty = true; return; }
+    syncing = true; dirty = false; clearTimeout(retryTimer); account.setStatus('saving');
+    try {
+      if (state.owner && state.owner !== u.id) state = sync.empty();               // leftovers from a different account: never mix them in
+      const { data, error } = await auth.loadProgress(COURSE.id);
+      if (error) throw error;
+      const cloud = data ? sync.fromCloudRow(data) : sync.empty();
+      const before = state, merged = sync.merge(state, cloud); merged.owner = u.id;
+      const changedHere = !sync.sameContent(merged, before);
+      state = merged; persist();
+      if (!data || !sync.sameContent(merged, cloud) || data.total !== LESSONS.length) {
+        const r = await auth.saveProgress(COURSE.id, sync.toCloudRow(state, LESSONS.length));
+        if (r.error) throw r.error;
+      }
+      account.setStatus('saved');
+      if (changedHere && !dirty) refreshView();
+    } catch (e) {
+      console.warn('Progress sync failed (it stays saved on this device and will retry):', e);
+      account.setStatus('error'); retryTimer = setTimeout(syncNow, 15000);
+    } finally {
+      syncing = false;
+      if (dirty) { clearTimeout(syncTimer); syncTimer = setTimeout(syncNow, 1200); }
+    }
+  }
+  // signed out (here or in another tab): the account's progress must not linger on this device
+  function forgetIfOwned() { if (state.owner) { state = sync.empty(); persist(); refreshView(); } account.setStatus(''); }
+
+  auth.ready.then(u => {
+    if (u) syncNow();
+    else if (auth.enabled && !auth.unavailable) forgetIfOwned();                    // no valid session, but the saved copy belongs to an account
+  });
+  auth.onChange(u => { if (u) syncNow(); else forgetIfOwned(); });
+  window.addEventListener('online', () => { if (auth.user() && dirty) syncNow(); });
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth.user()) syncNow(); else if (dirty) syncNow(); });
 
   /* ---------- theme (shared by every course on this site) ---------- */
   const theme = window.R357.theme;
@@ -50,8 +100,9 @@
       <nav class="nav" aria-label="Main">${nav.map(n => `<a href="${n[0]}" data-v="${n[1]}">${n[2]}</a>`).join('')}</nav>
       <button id="theme" class="icon-btn" type="button" aria-label="Toggle theme"></button></div>`;
     const foot = document.getElementById('site-footer');
-    foot.innerHTML = `<p><b>${COURSE.name}</b> is a course from <a href="${SCHOOL.home}">${SCHOOL.name}</a>.</p>${COURSE.disclaimer ? `<p>${COURSE.disclaimer}</p>` : ''}`;
+    foot.innerHTML = `<p><b>${COURSE.name}</b> is a course from <a href="${SCHOOL.home}">${SCHOOL.name}</a>. <a href="/privacy">Privacy</a></p>${COURSE.disclaimer ? `<p>${COURSE.disclaimer}</p>` : ''}`;
     document.getElementById('theme').addEventListener('click', theme.toggle);
+    account.mount();
   }
 
   /* ---------- small helpers ---------- */
@@ -207,7 +258,7 @@
     mountQuiz(l);
     if (l.widget && window.WIDGETS && window.WIDGETS[l.widget]) window.WIDGETS[l.widget](document.getElementById('widget'));
     document.getElementById('mark').addEventListener('click', e => {
-      state.done[l.id] = !state.done[l.id]; if (!state.done[l.id]) delete state.done[l.id]; save();
+      sync.mark(state, l.id, !state.done[l.id], Date.now()); save();
       const d = !!state.done[l.id]; e.target.classList.toggle('primary', !d); e.target.textContent = d ? '✓ Completed (click to undo)' : 'Mark as complete';
     });
   }

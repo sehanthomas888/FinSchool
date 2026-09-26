@@ -1,7 +1,8 @@
 {
   "rewrites": [
     { "source": "/marginal", "destination": "/courses/marginal/index.html" },
-    { "source": "/marginal/", "destination": "/courses/marginal/index.html" }
+    { "source": "/marginal/", "destination": "/courses/marginal/index.html" },
+    { "source": "/privacy", "destination": "/privacy.html" }
   ],
   "redirects": [
     {

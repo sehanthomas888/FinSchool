@@ -7,3 +7,6 @@ node_modules/
 *.log
 .DS_Store
 Thumbs.db
+
+# Google OAuth client downloads (contain a secret)
+client_secret*.json

@@ -28,7 +28,7 @@ Both methods are off in `shared/config.js` until they are ready, so nothing brok
 2. **Credentials → Create credentials → OAuth client ID → Web application.**
    - **Authorized JavaScript origins:** `https://r357-education.vercel.app` and `http://localhost:8123`
    - **Authorized redirect URI:** `https://aqrxgjguqazsezlsmbiw.supabase.co/auth/v1/callback`
-3. Run the helper, which asks for the **Client ID** and **Client secret**, applies them to Supabase and flips `google: true` in `shared/config.js`. The secret is never written to a file in the repo:
+3. Click **Download JSON** on the "OAuth client created" dialog (or on the client's page) and put the file in the repo folder (or leave it in Downloads). Run the helper: it reads the Client ID and secret from that file, applies them to Supabase, flips `google: true` in `shared/config.js`, and deletes the file. Git ignores `client_secret*.json`, so it can never be committed:
    ```powershell
    powershell -ExecutionPolicy Bypass -File tools\enable-google.ps1
    ```

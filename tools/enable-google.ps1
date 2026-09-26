@@ -19,24 +19,27 @@ $web = (Get-Content $file.FullName -Raw | ConvertFrom-Json).web
 $id = $web.client_id; $secret = $web.client_secret
 if ($id -notmatch '\.apps\.googleusercontent\.com$' -or $secret -notmatch '^GOCSPX-') { throw 'That file does not look like a Google web client.' }
 
+# The Google block lives in config.toml only while this script pushes it; afterwards it is removed again, so a later
+# "supabase config push" cannot overwrite the stored credentials with placeholder text.
 $toml = Join-Path $root 'supabase\config.toml'
-$text = [IO.File]::ReadAllText($toml)
-$new = [regex]::Replace($text, '(\[auth\.external\.google\]\s*\r?\nenabled = )false', '${1}true')
-if ($new -eq $text -and $text -notmatch '\[auth\.external\.google\]\s*\r?\nenabled = true') { throw 'Could not find the Google block in supabase/config.toml.' }
-[IO.File]::WriteAllText($toml, $new, (New-Object Text.UTF8Encoding($false)))
-
-$env:GOOGLE_CLIENT_ID = $id
-$env:GOOGLE_CLIENT_SECRET = $secret
-Write-Host 'Applying to Supabase...'
-supabase config push
-if ($LASTEXITCODE -ne 0) { throw 'supabase config push failed.' }
-
+$original = [IO.File]::ReadAllText($toml)
+$block = "`n[auth.external.google]`nenabled = true`nclient_id = `"env(GOOGLE_CLIENT_ID)`"`nsecret = `"env(GOOGLE_CLIENT_SECRET)`"`nredirect_uri = `"`"`nurl = `"`"`nskip_nonce_check = false`nemail_optional = false`n"
+try {
+  [IO.File]::WriteAllText($toml, $original + $block, (New-Object Text.UTF8Encoding($false)))
+  $env:GOOGLE_CLIENT_ID = $id
+  $env:GOOGLE_CLIENT_SECRET = $secret
+  Write-Host 'Applying to Supabase...'
+  supabase config push
+  if ($LASTEXITCODE -ne 0) { throw 'supabase config push failed.' }
+} finally {
+  [IO.File]::WriteAllText($toml, $original, (New-Object Text.UTF8Encoding($false)))
+  Remove-Item Env:GOOGLE_CLIENT_ID, Env:GOOGLE_CLIENT_SECRET -ErrorAction SilentlyContinue
+}
 $cfg = Join-Path $root 'shared\config.js'
 $c = [IO.File]::ReadAllText($cfg)
 $c2 = $c -replace 'google:\s*false', 'google: true'
 [IO.File]::WriteAllText($cfg, $c2, (New-Object Text.UTF8Encoding($false)))
 
-Remove-Item Env:GOOGLE_CLIENT_ID, Env:GOOGLE_CLIENT_SECRET
 [IO.File]::Delete($file.FullName)
 Write-Host ''
 Write-Host 'Done. Google sign-in is on in Supabase and switched on in shared/config.js.'

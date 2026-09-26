@@ -35,7 +35,7 @@ Both methods are off in `shared/config.js` until they are ready, so nothing brok
    (By hand instead: Dashboard → **Authentication → Sign In / Providers → Google → enable**, paste both, save, then set `google: true` in `shared/config.js`.)
 4. Try it at http://localhost:8123/marginal, then commit and push.
 
-The Google block in `config.toml` reads its values from the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables. Note that `supabase config push` also switches off Twilio SMS on the project (it was on by default and is not used).
+Google's credentials are stored on the Supabase project, not in `config.toml`, on purpose: the helper adds the Google block for the duration of its push and removes it afterwards. If the block were left in the file with `env(...)` placeholders, a later `supabase config push` would overwrite the stored credentials with the placeholder text and break sign-in. Run `supabase config diff` before any push and read it. (A push also switches off Twilio SMS on the project: it is on by default and not used.)
 
 ### 2. Email code sign-in (needs a custom email sender)
 

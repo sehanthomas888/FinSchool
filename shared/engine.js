@@ -188,16 +188,37 @@
     document.getElementById('fq').addEventListener('input', e => draw(e.target.value));
   }
 
-  function quizHTML() {
-    return `<section class="quiz" id="quiz"><h2>Check your understanding</h2><div id="qbody"></div></section>`;
+  /* ---------- quiz ----------
+     A lesson's `quiz` is a bank of questions, not a fixed test. Each attempt draws `quizSize` (default 5) from the bank,
+     mixing question kinds (k: 'concept' | 'calc' | 'apply') and preferring ones that were not in the previous attempt, so
+     "Retake" is a fresh set. An entry can also be { gen: () => question, k } for numbers that change every time.
+     The saved best score is only ever replaced by a better percentage (sync.betterScore), so nothing already earned is lost. */
+  const SEEN_KEY = 'rosetta.quizseen.' + COURSE.id;
+  const readSeen = () => { try { return JSON.parse(localStorage.getItem(SEEN_KEY)) || {}; } catch (e) { return {}; } };
+  const isGen = e => typeof e.gen === 'function';
+  function drawQuiz(l) {
+    const pool = l.quiz, size = Math.min(l.quizSize || 5, pool.length);
+    const seen = readSeen(), last = new Set(seen[l.id] || []), all = pool.map((_, i) => i);
+    const ranked = shuffle(all.filter(i => isGen(pool[i]) || !last.has(i))).concat(shuffle(all.filter(i => !isGen(pool[i]) && last.has(i))));
+    const kinds = {};
+    ranked.forEach(i => { const k = pool[i].k || 'concept'; (kinds[k] = kinds[k] || []).push(i); });
+    const lists = shuffle(Object.keys(kinds)).map(k => kinds[k]), picked = [];
+    while (picked.length < size && lists.some(x => x.length)) for (const x of lists) if (x.length && picked.length < size) picked.push(x.shift());
+    try { seen[l.id] = picked.filter(i => !isGen(pool[i])); localStorage.setItem(SEEN_KEY, JSON.stringify(seen)); } catch (e) { /* storage unavailable */ }
+    return shuffle(picked).map(i => isGen(pool[i]) ? pool[i].gen() : pool[i]);
+  }
+  function quizHTML(l) {
+    const many = (l.quiz || []).length > (l.quizSize || 5);
+    return `<section class="quiz" id="quiz"><h2>Check your understanding</h2>${many ? '<p class="quiz-sub">Every attempt draws a fresh set of questions from a bigger bank.</p>' : ''}<div id="qbody"></div></section>`;
   }
   function mountQuiz(l) {
     const body = document.getElementById('qbody');
     const prev = state.scores[l.id];
     function start() {
       let answered = 0, correct = 0;
-      const qs = l.quiz.map(q => { const idx = shuffle(q.o.map((t, i) => i)); return { q, idx }; });
-      body.innerHTML = (prev ? `<p class="best">Best score so far: ${prev[0]}/${prev[1]}</p>` : '') + qs.map((it, qi) =>
+      const qs = drawQuiz(l).map(q => ({ q, idx: q.fixed ? q.o.map((t, i) => i) : shuffle(q.o.map((t, i) => i)) }));
+      const best = state.scores[l.id] || prev;
+      body.innerHTML = (best ? `<p class="best">Best score so far: ${best[0]}/${best[1]}</p>` : '') + qs.map((it, qi) =>
         `<div class="q" data-q="${qi}"><p class="qtext"><b>${qi + 1}.</b> ${it.q.q}</p><div class="opts">${it.idx.map(oi => `<button class="opt" data-o="${oi}">${it.q.o[oi]}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('') + '<div class="result" hidden></div>';
       body.querySelectorAll('.q').forEach(qel => {
         const it = qs[+qel.dataset.q];
@@ -208,17 +229,22 @@
           if (!ok) btn.classList.add('wrong');
           const why = qel.querySelector('.why'); why.hidden = false; why.innerHTML = (ok ? '<b>Correct.</b> ' : '<b>Not quite.</b> ') + it.q.why;
           if (answered === qs.length) {
-            const best = state.scores[l.id];
-            if (!best || correct >= best[0]) state.scores[l.id] = [correct, qs.length];
+            state.scores[l.id] = sync.betterScore(state.scores[l.id], [correct, qs.length]);
             save();
             const res = body.querySelector('.result'); res.hidden = false;
-            res.innerHTML = `<b>You scored ${correct}/${qs.length}.</b> ${correct === qs.length ? 'Nicely done.' : 'Re-read the sections above and try again.'} <button class="btn" id="retry">Retake quiz</button>`;
+            res.innerHTML = `<b>You scored ${correct}/${qs.length}.</b> ${correct === qs.length ? 'Nicely done.' : 'Re-read the sections above, then try again.'} <button class="btn" id="retry">Try a fresh set</button>`;
             document.getElementById('retry').addEventListener('click', start);
           }
         }));
       });
     }
     start();
+  }
+
+  // Optional blocks any lesson can carry: `los` (what you will be able to do) and `terms` (words you need first).
+  function introHTML(l) {
+    return (l.los ? `<aside class="los"><b class="lab">By the end of this lesson you will be able to</b><ul>${l.los.map(x => `<li>${x}</li>`).join('')}</ul></aside>` : '') +
+      (l.terms ? `<section class="words"><b class="lab">Words you will meet</b><dl>${l.terms.map(x => `<dt>${x[0]}</dt><dd>${x[1]}</dd>`).join('')}</dl></section>` : '');
   }
 
   function lessonView(id) {
@@ -233,9 +259,12 @@
       <div class="cite"><div><b>${esc(l.authors)}</b> (${l.year})</div><div class="cite-j">${esc(l.journal)}</div>
         <div class="cite-row"><span class="tag">Reading difficulty: ${l.level}</span><a class="btn small" target="_blank" rel="noopener" href="https://scholar.google.com/scholar?q=${q}">Find the original ↗</a></div></div>
       <div class="prose paper">
+        ${l.plain ? `<aside class="callout plain"><b class="lab">The paper in plain words</b><p>${l.plain}</p></aside>` : ''}
+        ${introHTML(l)}
         <h2>The question</h2><p>${l.question}</p>
         <h2>The big idea</h2><p>${l.idea}</p>
         <h2>How they did it</h2><p>${l.method}</p>
+        ${l.example ? `<h2>A tiny example</h2>${l.example}` : ''}
         <h2>What they found</h2><p>${l.findings}</p>
         <h2>Why it mattered</h2><p>${l.matters}</p>
         <h2>Critiques and what came after</h2><p>${l.critique}</p>
@@ -243,16 +272,16 @@
         <p class="disclaimer">This summary is written in our own words and simplified. Details and numbers can be subtle, so check them against the original before relying on them.</p>
       </div>`;
     } else {
-      inner = `<div class="prose">${l.body}</div>
+      inner = `<div class="prose">${introHTML(l)}${l.body}</div>
         ${l.widget ? `<section class="widget"><h2>Try it</h2><div id="widget"></div></section>` : ''}
-        ${l.takeaways ? `<section class="takeaways"><h2>Key takeaways</h2><ul>${l.takeaways.map(t => `<li>${t}</li>`).join('')}</ul></section>` : ''}`;
+        ${l.takeaways ? `<section class="takeaways"><h2>Summary: the key points</h2><ul>${l.takeaways.map(t => `<li>${t}</li>`).join('')}</ul></section>` : ''}`;
     }
     app.innerHTML = `<article class="lesson">
       <a class="crumb" href="#/library">← Library</a>
       <div class="lh"><span class="badge ${l.type}">${TYPE_LABEL[l.type]}</span><span class="lmeta">${l.min} min · ${l.type === 'paper' ? 'Paper breakdown' : l.level}</span></div>
       <h1>${l.title}</h1><p class="dek">${l.blurb}</p>
       ${inner}
-      ${quizHTML()}
+      ${quizHTML(l)}
       <div class="complete"><button class="btn ${done ? '' : 'primary'} big" id="mark">${done ? '✓ Completed (click to undo)' : 'Mark as complete'}</button></div>
       ${related.length ? `<section class="related"><h2>Related</h2><div class="grid">${related.map(r => card(byId[r])).join('')}</div></section>` : ''}
       <nav class="pn">${prev ? `<a href="#/lesson/${prev.id}"><small>← Previous</small><span>${prev.title}</span></a>` : '<span></span>'}${next ? `<a class="r" href="#/lesson/${next.id}"><small>Next →</small><span>${next.title}</span></a>` : '<span></span>'}</nav>

@@ -20,7 +20,8 @@ window.COURSE = {
   ],
   // Modules, in learning order. Every lesson id must appear in exactly one module (tools/audit.js checks this).
   modules: [
-    { name: 'Foundations', desc: 'Discounting, risk, and the first equilibrium model of asset prices.', ids: ['reading-papers', 'math-basics', 'tvm', 'risk', 'p-markowitz', 'capm', 'p-sharpe'] },
+    { name: 'Start here', desc: 'No background needed: what finance is, what you can own, the math in plain English, and how returns are measured.', ids: ['fin-map', 'fin-instruments', 'math-basics', 'fin-returns'] },
+    { name: 'Foundations', desc: 'Discounting, risk, and the first equilibrium model of asset prices.', ids: ['tvm', 'risk', 'reading-papers', 'p-markowitz', 'capm', 'p-sharpe'] },
     { name: 'Are markets efficient?', desc: 'From random walks to factors to psychology: the central debate of modern finance.', ids: ['emh', 'p-fama70', 'p-shiller', 'p-ff93', 'behav', 'p-kt79'] },
     { name: 'Portfolio management', desc: 'Allocation, performance measurement, fees, tail risk and the process of running a portfolio.', ids: ['pm-cal', 'pm-perf', 'p-jensen68', 'pm-fees', 'p-sharpe91', 'pm-risk', 'pm-ips', 'p-bhb86'] },
     { name: 'Financial statement analysis', desc: 'Read the statements, decompose returns, judge earnings quality, and value the firm.', ids: ['fsa-statements', 'fsa-ratios', 'fsa-dupont', 'fsa-choices', 'fsa-quality', 'p-ballbrown68', 'p-sloan96', 'fsa-fcf', 'fsa-multiples', 'fsa-credit', 'p-altman68'] },

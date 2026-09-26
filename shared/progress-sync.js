@@ -88,7 +88,7 @@
   }
   function fromCloudRow(row) { return normalize({ marks: row && row.marks, scores: row && row.scores }); }
 
-  const api = { empty, normalize, mark, merge, doneCount, sameContent, toCloudRow, fromCloudRow };
+  const api = { empty, normalize, mark, merge, doneCount, sameContent, toCloudRow, fromCloudRow, betterScore };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   if (typeof window !== 'undefined') { window.Rosetta = window.Rosetta || {}; window.Rosetta.sync = api; }
 })();

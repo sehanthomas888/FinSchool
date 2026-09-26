@@ -278,3 +278,33 @@ details.math summary { cursor: pointer; font-weight: 700; color: var(--accent); 
 }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } .card, .bar i { transition: none; } }
 
+
+/* rookie-first lesson blocks: outcomes, jargon list, example/solution, analogies, pitfalls, pause-and-try */
+.los { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--c3); border-radius: var(--r); padding: 16px 20px 14px; margin: 0 0 26px; }
+.los .lab { margin-bottom: 8px; }
+.los ul { margin: 0; padding-left: 22px; }
+.los li { font-size: 16.5px; margin: 5px 0; }
+.words { background: var(--bg); border: 1px dashed var(--line); border-radius: var(--r); padding: 14px 20px 16px; margin: 22px 0; }
+.words .lab { margin-bottom: 8px; }
+.words dl { display: grid; grid-template-columns: max-content 1fr; gap: 7px 18px; margin: 0; font-size: 16px; }
+.words dt { font-weight: 700; color: var(--accent); }
+.words dd { margin: 0; color: var(--muted); }
+.callout.story { background: color-mix(in srgb, var(--c2) 10%, var(--surface)); border-left: 5px solid var(--c2); border-radius: 0 var(--r) var(--r) 0; }
+.callout.mistake { background: color-mix(in srgb, var(--bad) 8%, var(--surface)); border-left: 5px solid var(--bad); border-radius: 0 var(--r) var(--r) 0; }
+.callout.plain { background: var(--accent-soft); border-left: 5px solid var(--accent); border-radius: 0 var(--r) var(--r) 0; }
+.callout > .lab { margin-bottom: 4px; }
+.callout p { margin: 6px 0 0; font-size: 16.5px; }
+.example { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 14px 20px 16px; margin: 20px 0; box-shadow: var(--shadow); }
+.example p { margin: 4px 0 10px; font-size: 16.5px; }
+.example .lab.sol { margin-top: 12px; color: var(--accent); }
+.example .steps { margin-top: 2px; }
+details.pause { margin: 20px 0; border: 1px solid color-mix(in srgb, var(--c3) 40%, var(--line)); border-radius: var(--r); background: color-mix(in srgb, var(--c3) 7%, var(--surface)); padding: 12px 18px; }
+details.pause summary { cursor: pointer; font-weight: 700; color: var(--ink); }
+details.pause summary::marker { color: var(--c3); }
+details.pause[open] summary { margin-bottom: 8px; }
+details.pause p { margin: 6px 0; font-size: 16.5px; }
+.prose table.simple { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 15.5px; }
+.prose table.simple th, .prose table.simple td { text-align: left; padding: 8px 10px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.prose table.simple th { font-size: 12.5px; letter-spacing: .07em; text-transform: uppercase; color: var(--muted); }
+.quiz-sub { color: var(--muted); font-size: 15px; margin: -6px 0 14px; }
+@media (max-width: 520px) { .words dl { grid-template-columns: 1fr; gap: 2px; } .words dd { margin-bottom: 8px; } }

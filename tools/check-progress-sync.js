@@ -42,6 +42,14 @@ ok('higher score wins', J(S.merge({ scores: { q: [1, 3] } }, { scores: { q: [3, 
 ok('a worse retake never lowers the best score', J(S.merge({ scores: { q: [3, 3] } }, { scores: { q: [0, 3] } }).scores.q) === '[3,3]');
 ok('score compared by ratio, not raw count', J(S.merge({ scores: { q: [2, 3] } }, { scores: { q: [3, 5] } }).scores.q) === '[2,3]');
 
+// --- quiz length can change between versions without ever lowering a saved best --------------------------------
+const B = S.betterScore;
+ok('an old 3-question 3/3 is not replaced by a longer quiz scored 3/5', J(B([3, 3], [3, 5])) === '[3,3]');
+ok('an old 2/3 is beaten by 4/5 (80% > 67%)', J(B([2, 3], [4, 5])) === '[4,5]');
+ok('equal percentage prefers the longer quiz', J(B([3, 3], [5, 5])) === '[5,5]');
+ok('no previous score: the new one is kept', J(B(undefined, [1, 5])) === '[1,5]' && J(B([1, 5], undefined)) === '[1,5]');
+ok('a lower first retake of a longer quiz never overwrites 100%', J(B([3, 3], [4, 5])) === '[3,3]');
+
 // --- algebra: order of syncing must never matter (randomised property tests) ------------------------------
 let seed = 12345; const rnd = () => (seed = (seed * 1664525 + 1013904223) % 4294967296) / 4294967296;
 const ids = ['a', 'b', 'c', 'd', 'e'];

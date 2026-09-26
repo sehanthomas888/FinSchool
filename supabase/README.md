@@ -28,8 +28,14 @@ Both methods are off in `shared/config.js` until they are ready, so nothing brok
 2. **Credentials → Create credentials → OAuth client ID → Web application.**
    - **Authorized JavaScript origins:** `https://r357-education.vercel.app` and `http://localhost:8123`
    - **Authorized redirect URI:** `https://aqrxgjguqazsezlsmbiw.supabase.co/auth/v1/callback`
-3. Copy the **Client ID** and **Client secret** into Supabase: Dashboard → **Authentication → Sign In / Providers → Google → enable**, paste both, save. (Or put them in `config.toml` under `[auth.external.google]` with `client_id = "env(GOOGLE_CLIENT_ID)"` and `secret = "env(GOOGLE_CLIENT_SECRET)"`, export those two variables, and run `supabase config push`.)
-4. In `shared/config.js` set `auth: { google: true, ... }`, commit and push.
+3. Run the helper, which asks for the **Client ID** and **Client secret**, applies them to Supabase and flips `google: true` in `shared/config.js`. The secret is never written to a file in the repo:
+   ```powershell
+   powershell -ExecutionPolicy Bypass -File tools\enable-google.ps1
+   ```
+   (By hand instead: Dashboard → **Authentication → Sign In / Providers → Google → enable**, paste both, save, then set `google: true` in `shared/config.js`.)
+4. Try it at http://localhost:8123/marginal, then commit and push.
+
+The Google block in `config.toml` reads its values from the `GOOGLE_CLIENT_ID` and `GOOGLE_CLIENT_SECRET` environment variables. Note that `supabase config push` also switches off Twilio SMS on the project (it was on by default and is not used).
 
 ### 2. Email code sign-in (needs a custom email sender)
 

@@ -54,7 +54,9 @@
         if (r.error) throw r.error;
       }
       account.setStatus('saved');
-      if (changedHere && !dirty) refreshView();
+      // Redraw whenever the account's copy changed what this page shows. (Not conditional on `dirty`: at page load two
+      // sync requests start together, the second marks the first as dirty, and skipping the redraw left an empty screen.)
+      if (changedHere) refreshView();
     } catch (e) {
       console.warn('Progress sync failed (it stays saved on this device and will retry):', e);
       account.setStatus('error'); retryTimer = setTimeout(syncNow, 15000);

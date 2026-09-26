@@ -1,4 +1,4 @@
-/* Styles that only the R357 Education home page needs. Everything else comes from theme.css. */
+/* Styles that only the Rosetta Education home page needs. Everything else comes from theme.css. */
 .courses { margin: 8px 0 52px; }
 .section-label { font: 700 13px var(--sans); letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 14px; }
 /* cards stay a comfortable width even with a single course, so the page never looks empty or stretched */

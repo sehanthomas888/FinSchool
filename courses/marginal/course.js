@@ -1,4 +1,4 @@
-/* Marginal: the finance and economics course of R357 Education.
+/* Marginal: the finance and economics course of Rosetta Education.
    This file is the course's whole identity: name, home-page copy and the order of its modules.
    The shared engine (shared/engine.js) does the rest. */
 window.COURSE = {

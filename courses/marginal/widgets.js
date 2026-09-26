@@ -3,7 +3,7 @@
 (function () {
   'use strict';
 
-  const { money, moneyShort, pct, clamp, niceTicks, lineChart, statTiles, controlsHTML, bind, shell, mathBox, stepRows, erf, N, randn } = window.R357.ui;
+  const { money, moneyShort, pct, clamp, niceTicks, lineChart, statTiles, controlsHTML, bind, shell, mathBox, stepRows, erf, N, randn } = window.Rosetta.ui;
 
   const W = {};
 

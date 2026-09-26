@@ -34,7 +34,7 @@ main { max-width: 1080px; margin: 0 auto; padding: 32px 20px 72px; min-height: 7
 .top { position: sticky; top: 0; z-index: 10; background: color-mix(in srgb, var(--bg) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
 .top-in { max-width: 1080px; margin: 0 auto; padding: 10px 20px; display: flex; align-items: center; gap: 12px; }
 .brand { font: 700 22px var(--serif); color: var(--ink); text-decoration: none; display: flex; align-items: center; gap: 10px; }
-/* school breadcrumb: "R357 Education / <course>" */
+/* school breadcrumb: "Rosetta Education / <course>" */
 .school { display: flex; align-items: baseline; gap: 6px; text-decoration: none; color: var(--muted); font: 600 14px var(--sans); }
 .school:hover { color: var(--accent); }
 .school-mark { font-weight: 800; letter-spacing: .04em; color: var(--ink); }

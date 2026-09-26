@@ -4,7 +4,7 @@ Learners can sign in so their progress follows them between devices. Everything 
 
 | | |
 | --- | --- |
-| Project | `r357-education` in the "Sehan Thomas" organization |
+| Project | `rosetta-education` in the "Sehan Thomas" organization |
 | Project ref | `aqrxgjguqazsezlsmbiw` |
 | Dashboard | https://supabase.com/dashboard/project/aqrxgjguqazsezlsmbiw |
 | Region | ap-south-1 (Mumbai) |
@@ -24,9 +24,9 @@ Both methods are off in `shared/config.js` until they are ready, so nothing brok
 
 ### 1. Google sign-in (recommended first: no email sending needed)
 
-1. In the [Google Cloud Console](https://console.cloud.google.com/), create a project (or use one), then **APIs & Services → OAuth consent screen**: app name `R357 Education`, your support email, and add the scopes `openid`, `email` and `profile`. Publish the app ("In production") so anyone can sign in.
+1. In the [Google Cloud Console](https://console.cloud.google.com/), create a project (or use one), then **APIs & Services → OAuth consent screen**: app name `Rosetta Education`, your support email, and add the scopes `openid`, `email` and `profile`. Publish the app ("In production") so anyone can sign in.
 2. **Credentials → Create credentials → OAuth client ID → Web application.**
-   - **Authorized JavaScript origins:** `https://r357-education.vercel.app` and `http://localhost:8123`
+   - **Authorized JavaScript origins:** `https://rosetta-education.vercel.app` and `http://localhost:8123`
    - **Authorized redirect URI:** `https://aqrxgjguqazsezlsmbiw.supabase.co/auth/v1/callback`
 3. Click **Download JSON** on the "OAuth client created" dialog (or on the client's page) and put the file in the repo folder (or leave it in Downloads). Run the helper: it reads the Client ID and secret from that file, applies them to Supabase, flips `google: true` in `shared/config.js`, and deletes the file. Git ignores `client_secret*.json`, so it can never be committed:
    ```powershell
@@ -35,7 +35,7 @@ Both methods are off in `shared/config.js` until they are ready, so nothing brok
    (By hand instead: Dashboard → **Authentication → Sign In / Providers → Google → enable**, paste both, save, then set `google: true` in `shared/config.js`.)
 4. Try it at http://localhost:8123/marginal, then commit and push.
 
-Google's credentials are stored on the Supabase project, not in `config.toml`, on purpose: the helper adds the Google block for the duration of its push and removes it afterwards. If the block were left in the file with `env(...)` placeholders, a later `supabase config push` would overwrite the stored credentials with the placeholder text and break sign-in. Run `supabase config diff` before any push and read it. (A push also switches off Twilio SMS on the project: it is on by default and not used.)
+Google's credentials are stored on the Supabase project, not in `config.toml`, on purpose: the helper adds the Google block for the duration of its push and removes it afterwards. If the block were left in the file with `env(...)` placeholders, a later `supabase config push` would overwrite the stored credentials with the placeholder text and break sign-in. Run `supabase config diff` before any push and read it. (Twilio SMS shows up in the diff as enabled on the server: it is on by default, not used, and config push leaves it as is.)
 
 ### 2. Email code sign-in (needs a custom email sender)
 
@@ -71,6 +71,6 @@ node tools/test-supabase-rls.js
 ## Good to know
 
 - **Intentional advisor warning.** `supabase db advisors` flags `delete_my_account()` as a security-definer function callable by signed-in users. That is by design: it can only delete the caller's own account (it reads the caller's id from their token), and the test above checks that nobody else can call it.
-- **Free plan pauses idle projects.** Supabase's free plan pauses a project after about a week without activity, and sign-in will not work until it is restored from the dashboard. If R357 Education gets real users, consider the Pro plan (or a small scheduled request to keep it active).
+- **Free plan pauses idle projects.** Supabase's free plan pauses a project after about a week without activity, and sign-in will not work until it is restored from the dashboard. If Rosetta Education gets real users, consider the Pro plan (or a small scheduled request to keep it active).
 - **Two devices, one account.** Progress is merged, not overwritten: for each lesson the most recent action wins (so "undo" syncs too) and the best quiz score is kept. The rules are in `shared/progress-sync.js` and tested by `tools/check-progress-sync.js`.
 - **Signing out** removes that account's progress from the browser, so the next person on a shared computer doesn't inherit it. It stays in the account.

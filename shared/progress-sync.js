@@ -90,5 +90,5 @@
 
   const api = { empty, normalize, mark, merge, doneCount, sameContent, toCloudRow, fromCloudRow };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
-  if (typeof window !== 'undefined') { window.R357 = window.R357 || {}; window.R357.sync = api; }
+  if (typeof window !== 'undefined') { window.Rosetta = window.Rosetta || {}; window.Rosetta.sync = api; }
 })();

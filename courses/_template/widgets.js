@@ -1,8 +1,8 @@
 /* Interactive widgets for this course. Each is a function(el) that builds its UI inside el.
-   The shared UI kit (window.R357.ui) supplies sliders, charts, stat tiles and "show the math" panels. */
+   The shared UI kit (window.Rosetta.ui) supplies sliders, charts, stat tiles and "show the math" panels. */
 (function () {
   'use strict';
-  const { shell, bind, lineChart, statTiles, mathBox, stepRows } = window.R357.ui;
+  const { shell, bind, lineChart, statTiles, mathBox, stepRows } = window.Rosetta.ui;
   const W = {};
 
   // The pattern every widget follows: describe the sliders, build the shell, then draw in bind()'s callback.

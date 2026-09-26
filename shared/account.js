@@ -2,9 +2,9 @@
    Renders nothing at all unless a sign-in method is switched on in shared/config.js. */
 (function () {
   'use strict';
-  window.R357 = window.R357 || {};
-  const auth = window.R357.auth;
-  if (!auth || !auth.enabled) { window.R357.account = { mount() {}, setStatus() {} }; return; }
+  window.Rosetta = window.Rosetta || {};
+  const auth = window.Rosetta.auth;
+  if (!auth || !auth.enabled) { window.Rosetta.account = { mount() {}, setStatus() {} }; return; }
 
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   const ICON_USER = '<svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/></svg>';
@@ -159,5 +159,5 @@
     f.querySelector('input').focus();
   }
 
-  window.R357.account = { mount, setStatus, openSignIn };
+  window.Rosetta.account = { mount, setStatus, openSignIn };
 })();

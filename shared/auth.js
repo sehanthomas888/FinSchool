@@ -1,12 +1,12 @@
 /* Learner accounts, backed by Supabase Auth and the `progress` table.
-   window.R357.auth is always present. When accounts are not configured (see shared/config.js) it reports
+   window.Rosetta.auth is always present. When accounts are not configured (see shared/config.js) it reports
    `enabled: false` and everything else is a harmless no-op, so the site simply keeps saving progress on this device.
 
    The Supabase library (213 KB) is loaded lazily: a first-time visitor who never signs in never downloads it. */
 (function () {
   'use strict';
-  window.R357 = window.R357 || {};
-  const cfg = window.R357.config || {};
+  window.Rosetta = window.Rosetta || {};
+  const cfg = window.Rosetta.config || {};
   const sb = cfg.supabase || {}, methods = Object.assign({ google: false, emailCode: false }, cfg.auth);
   const enabled = !!(sb.url && sb.key && (methods.google || methods.emailCode));
   const SDK_URL = '/shared/vendor/supabase-2.117.2.js';
@@ -70,7 +70,7 @@
       for (const k of Object.keys(localStorage)) {
         if (!/^[a-z0-9-]+\.v1$/.test(k)) continue;
         let v = null; try { v = JSON.parse(localStorage.getItem(k)); } catch (e) { /* not ours */ }
-        if (v && typeof v.owner === 'string') { localStorage.removeItem(k); localStorage.removeItem('r357.summary.' + k.replace(/\.v1$/, '')); }
+        if (v && typeof v.owner === 'string') { localStorage.removeItem(k); const id = k.replace(/\.v1$/, ''); localStorage.removeItem('rosetta.summary.' + id); localStorage.removeItem('r357.summary.' + id); }
       }
     } catch (e) { /* storage unavailable */ }
   }
@@ -112,7 +112,7 @@
   };
   const run = async fn => { try { const r = await fn(); if (r && r.error) return { ok: false, error: friendly(r.error) }; return { ok: true, data: r && r.data }; } catch (e) { return { ok: false, error: friendly(e) }; } };
 
-  window.R357.auth = {
+  window.Rosetta.auth = {
     enabled, methods, ready, availableMethods,
     get unavailable() { return unavailable; },
     get pending() { return pending; },

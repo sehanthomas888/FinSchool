@@ -1,8 +1,8 @@
 /* Site-wide configuration for learner accounts (Supabase).
    The URL and the "publishable" key are PUBLIC by design: they only identify the project. What each visitor can do
    is enforced inside the database by Row Level Security (supabase/migrations). Never put a secret/service key here. */
-window.R357 = window.R357 || {};
-window.R357.config = {
+window.Rosetta = window.Rosetta || {};
+window.Rosetta.config = {
   supabase: {
     url: 'https://aqrxgjguqazsezlsmbiw.supabase.co',
     key: 'sb_publishable_wH5_aJhywwffgg43b3Onnw_Dom9vjrw'
@@ -18,6 +18,6 @@ window.R357.config = {
   try {
     if (!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)) return;
     const q = new URLSearchParams(location.search).get('auth');
-    if (q) { const on = q.split(','); window.R357.config.auth = { google: on.includes('google'), emailCode: on.includes('emailCode') }; }
+    if (q) { const on = q.split(','); window.Rosetta.config.auth = { google: on.includes('google'), emailCode: on.includes('emailCode') }; }
   } catch (e) { /* ignore */ }
 })();

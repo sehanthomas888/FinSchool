@@ -1,4 +1,4 @@
-// Local dev server for the whole R357 Education site.
+// Local dev server for the whole Rosetta Education site.
 //   node tools/serve.js          then open http://localhost:8123
 // It serves the repo root and applies the same rewrites as vercel.json, so /marginal works exactly as it does online.
 const http = require('http'), fs = require('fs'), path = require('path');
@@ -24,4 +24,4 @@ http.createServer((req, res) => {
     res.writeHead(200, { 'Content-Type': types[path.extname(p)] || 'application/octet-stream', 'Cache-Control': 'no-store' });
     res.end(data);
   });
-}).listen(PORT, () => console.log(`R357 Education running at http://localhost:${PORT}  (course: http://localhost:${PORT}/marginal)`));
+}).listen(PORT, () => console.log(`Rosetta Education running at http://localhost:${PORT}  (course: http://localhost:${PORT}/marginal)`));

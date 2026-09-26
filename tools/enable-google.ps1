@@ -1,4 +1,4 @@
-# Turns on Google sign-in for R357 Education.
+# Turns on Google sign-in for Rosetta Education.
 # Run from the repo root after creating the Google OAuth client (see supabase/README.md):
 #   powershell -ExecutionPolicy Bypass -File tools\enable-google.ps1
 # It applies the Client ID and Client secret to the Supabase project, and switches the site's Google button on.

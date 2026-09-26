@@ -1,17 +1,17 @@
-# R357 Education
+# Rosetta Education
 
-Repository: https://github.com/sehanthomas888/R357-Education
+Repository: https://github.com/sehanthomas888/Rosetta-Education
 
-**R357 Education is a school of self-paced courses.** Each course teaches one subject from its sources: plain-English lessons, interactive tools, and breakdowns of the research behind the ideas.
+**Rosetta Education is a school of self-paced courses.** Each course teaches one subject from its sources: plain-English lessons, interactive tools, and breakdowns of the research behind the ideas.
 
 | Level | Name | Example |
 | --- | --- | --- |
-| The school | **R357 Education** | the home page |
+| The school | **Rosetta Education** | the home page |
 | A subject | **Course** | Marginal (finance and economics) |
 | A unit of a course | **Module** | Fixed income |
 | A page in a module | **Lesson** or **Paper breakdown** | Duration and convexity |
 
-Live at https://r357-education.vercel.app, with each course at its own path (Marginal: `/marginal`).
+Live at https://rosetta-education.vercel.app, with each course at its own path (Marginal: `/marginal`).
 
 ## Layout
 

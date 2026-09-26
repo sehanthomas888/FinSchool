@@ -1,4 +1,4 @@
--- R357 Education: learner accounts and saved progress.
+-- Rosetta Education: learner accounts and saved progress.
 --
 -- Accounts themselves live in Supabase Auth (auth.users). This migration adds the one table the site needs:
 -- one row per learner per course, holding their progress. Row Level Security guarantees a learner can only

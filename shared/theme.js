@@ -1,7 +1,7 @@
 /* Light/dark theme, shared by the school home and every course so the visitor's choice follows them everywhere. */
 (function () {
   'use strict';
-  const root = document.documentElement, KEY = 'r357.theme';
+  const root = document.documentElement, KEY = 'rosetta.theme';
   const isDark = () => root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches;
   function sync() {
     const b = document.getElementById('theme');
@@ -15,9 +15,9 @@
   }
   // legacyKey: an older per-course key to fall back to (so nobody's saved choice is lost)
   function init(legacyKey) {
-    try { const t = localStorage.getItem(KEY) || (legacyKey && localStorage.getItem(legacyKey)); if (t) root.dataset.theme = t; } catch (e) { /* ignore */ }
+    try { const t = localStorage.getItem(KEY) || localStorage.getItem('r357.theme') || (legacyKey && localStorage.getItem(legacyKey)); if (t) root.dataset.theme = t; } catch (e) { /* ignore */ }
   }
-  window.R357 = window.R357 || {};
-  window.R357.theme = { init, toggle, sync, isDark };
+  window.Rosetta = window.Rosetta || {};
+  window.Rosetta.theme = { init, toggle, sync, isDark };
   init();   // runs from <head>, so a saved choice applies before first paint (no light/dark flash)
 })();

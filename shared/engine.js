@@ -1,10 +1,10 @@
-/* R357 Education course engine.
+/* Rosetta Education course engine.
    Renders any course from three inputs: window.COURSE (identity + module order), window.LESSONS (content),
    and optionally window.GLOSSARY, window.FORMULAS and window.WIDGETS. Nothing here is subject-specific. */
 (function () {
   'use strict';
 
-  const SCHOOL = window.R357.school, COURSE = window.COURSE;
+  const SCHOOL = window.Rosetta.school, COURSE = window.COURSE;
 
   /* ---------- data ---------- */
   const MODULES = COURSE.modules;
@@ -18,8 +18,8 @@
      Always saved in this browser (localStorage). When the learner is signed in it is also synced to their account:
      each sync pulls the account's copy, merges it with this device's copy (rules in shared/progress-sync.js) and pushes
      the result back, so several devices, and guest progress from before signing in, all combine without losing anything. */
-  const sync = window.R357.sync, auth = window.R357.auth, account = window.R357.account;
-  const KEY = COURSE.id + '.v1', SUMMARY_KEY = 'r357.summary.' + COURSE.id;
+  const sync = window.Rosetta.sync, auth = window.Rosetta.auth, account = window.Rosetta.account;
+  const KEY = COURSE.id + '.v1', SUMMARY_KEY = 'rosetta.summary.' + COURSE.id;
   let state = sync.empty();
   try { state = sync.normalize(JSON.parse(localStorage.getItem(KEY))); } catch (e) { /* storage unavailable or empty */ }
   const doneCount = () => LESSONS.filter(l => state.done[l.id]).length;
@@ -75,7 +75,7 @@
   document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && auth.user()) syncNow(); else if (dirty) syncNow(); });
 
   /* ---------- theme (shared by every course on this site) ---------- */
-  const theme = window.R357.theme;
+  const theme = window.Rosetta.theme;
   theme.init(COURSE.id + '.theme');
 
   // A course may give itself its own accent colour (see the comment at the bottom of a course.js).

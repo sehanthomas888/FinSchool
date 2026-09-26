@@ -1,12 +1,12 @@
-/* R357 Education home page: the course catalog, with the visitor's own progress in each course.
+/* Rosetta Education home page: the course catalog, with the visitor's own progress in each course.
    Progress comes from the account (when signed in) or from the small summary each course keeps in this browser
    (see shared/engine.js). */
 (function () {
   'use strict';
-  const S = window.R357.school, courses = window.R357.courses || [], theme = window.R357.theme, auth = window.R357.auth, account = window.R357.account;
+  const S = window.Rosetta.school, courses = window.Rosetta.courses || [], theme = window.Rosetta.theme, auth = window.Rosetta.auth, account = window.Rosetta.account;
   const cloud = {};                                              // course id -> { done_count, total } from the signed-in account
 
-  const localSummary = id => { try { return JSON.parse(localStorage.getItem('r357.summary.' + id)); } catch (e) { return null; } };
+  const localSummary = id => { try { return JSON.parse(localStorage.getItem('rosetta.summary.' + id)); } catch (e) { return null; } };
   const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
   // the account is the source of truth when signed in; otherwise this browser's copy
   const progressFor = id => {

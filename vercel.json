@@ -8,7 +8,13 @@
     {
       "source": "/(.*)",
       "has": [{ "type": "host", "value": "marginal-r357.vercel.app" }],
-      "destination": "https://r357-education.vercel.app/marginal",
+      "destination": "https://rosetta-education.vercel.app/marginal",
+      "permanent": true
+    },
+    {
+      "source": "/(.*)",
+      "has": [{ "type": "host", "value": "r357-education.vercel.app" }],
+      "destination": "https://rosetta-education.vercel.app/$1",
       "permanent": true
     }
   ]

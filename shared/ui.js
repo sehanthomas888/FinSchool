@@ -1,5 +1,5 @@
-/* Shared UI kit for every R357 Education course: number formats, SVG line charts, slider controls,
-   "show the math" panels and normal-distribution helpers. Courses import it from window.R357.ui. */
+/* Shared UI kit for every Rosetta Education course: number formats, SVG line charts, slider controls,
+   "show the math" panels and normal-distribution helpers. Courses import it from window.Rosetta.ui. */
 (function () {
   'use strict';
 
@@ -92,6 +92,6 @@
   const N = x => 0.5 * (1 + erf(x / Math.SQRT2));
   const randn = () => { let u = 0, v = 0; while (!u) u = Math.random(); while (!v) v = Math.random(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v); };
 
-  window.R357 = window.R357 || {};
-  window.R357.ui = { money, moneyShort, pct, clamp, niceTicks, lineChart, statTiles, controlsHTML, bind, shell, mathBox, stepRows, erf, N, randn };
+  window.Rosetta = window.Rosetta || {};
+  window.Rosetta.ui = { money, moneyShort, pct, clamp, niceTicks, lineChart, statTiles, controlsHTML, bind, shell, mathBox, stepRows, erf, N, randn };
 })();

@@ -20,7 +20,7 @@ function balanced(id, field, html) {
 function loadCourse(dir) {
   const html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8').replace(/<!--[\s\S]*?-->/g, '');   // ignore commented-out scripts
   const srcs = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map(m => m[1]).filter(s => !/shared\/(theme|engine|config|auth|account)\.js$/.test(s));   // browser-only scripts
-  const win = { R357: {} }; const ctx = vm.createContext({ window: win, console, Math, JSON, Object, Array, String, Number, Date });
+  const win = { Rosetta: {} }; const ctx = vm.createContext({ window: win, console, Math, JSON, Object, Array, String, Number, Date });
   for (const s of srcs) {
     const file = path.join(ROOT, s.replace(/^\//, ''));
     if (!fs.existsSync(file)) { bad(`index.html references missing script ${s}`); continue; }
@@ -68,10 +68,10 @@ for (const name of dirs) {
 
 // catalog: every listed course must exist and be routable
 try {
-  const win = { R357: {} }; vm.runInNewContext(fs.readFileSync(path.join(COURSES, 'catalog.js'), 'utf8'), { window: win });
+  const win = { Rosetta: {} }; vm.runInNewContext(fs.readFileSync(path.join(COURSES, 'catalog.js'), 'utf8'), { window: win });
   const rewrites = JSON.parse(fs.readFileSync(path.join(ROOT, 'vercel.json'), 'utf8')).rewrites || [];
-  console.log('Catalog: ' + win.R357.courses.length + ' course(s)');
-  for (const c of win.R357.courses) {
+  console.log('Catalog: ' + win.Rosetta.courses.length + ' course(s)');
+  for (const c of win.Rosetta.courses) {
     if (!fs.existsSync(path.join(COURSES, c.id, 'index.html'))) bad(`catalog course "${c.id}" has no courses/${c.id}/index.html`);
     if (!rewrites.some(r => r.source === c.path)) bad(`catalog course "${c.id}": vercel.json has no rewrite for ${c.path}`);
   }
